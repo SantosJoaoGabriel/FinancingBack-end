@@ -36,6 +36,7 @@ public class TransacaoResource {
 
     @POST
     public Response criar(@Valid Transacao transacao) {
+        transacao.id = null;
         Transacao criada = service.criar(transacao);
         return Response.status(Response.Status.CREATED).entity(criada).build();
     }
