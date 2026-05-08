@@ -1,32 +1,34 @@
 package com.gastos.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "transacoes")
-public class Transacao extends PanacheEntity {
+public class Transaction extends PanacheEntity {
 
     @NotBlank(message = "Descrição é obrigatória")
     @Column(nullable = false)
-    public String descricao;
+    public String description;
 
     @NotBlank(message = "Categoria é obrigatória")
     @Column(nullable = false)
-    public String categoria;
+    public String category;
 
     @NotNull(message = "Data é obrigatória")
     @Column(nullable = false)
-    public LocalDate data;
+    public LocalDate date;
 
     @NotNull(message = "Valor é obrigatório")
     @Column(nullable = false, precision = 10, scale = 2)
-    public BigDecimal valor;
+    public BigDecimal amount;
 
     @Column
     public String paymentMethod;
