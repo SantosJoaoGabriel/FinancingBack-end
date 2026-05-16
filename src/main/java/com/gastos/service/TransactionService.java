@@ -55,6 +55,7 @@ public class TransactionService {
         existingTransaction.category = dto.category;
         existingTransaction.date = dto.date;
         existingTransaction.amount = dto.amount;
+        existingTransaction.type = dto.type;
         existingTransaction.paymentMethod = dto.paymentMethod;
         existingTransaction.notes = dto.notes;
 
@@ -76,6 +77,7 @@ public class TransactionService {
         dto.category = transaction.category;
         dto.date = transaction.date;
         dto.amount = transaction.amount;
+        dto.type = transaction.type;
         dto.paymentMethod = transaction.paymentMethod;
         dto.notes = transaction.notes;
         return dto;
@@ -87,6 +89,7 @@ public class TransactionService {
         transaction.category = dto.category;
         transaction.date = dto.date;
         transaction.amount = dto.amount;
+        transaction.type = dto.type;
         transaction.paymentMethod = dto.paymentMethod;
         transaction.notes = dto.notes;
         return transaction;

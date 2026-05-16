@@ -1,5 +1,6 @@
 package com.gastos.dto;
 
+import com.gastos.model.TransactionType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -25,4 +26,7 @@ public class TransactionDTO {
     public String paymentMethod;
 
     public String notes;
+
+    @NotNull(message = "Tipo é obrigatório")
+    public TransactionType type;
 }

@@ -3,6 +3,8 @@ package com.gastos.model;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +31,11 @@ public class Transaction extends PanacheEntity {
     @NotNull(message = "Valor é obrigatório")
     @Column(nullable = false, precision = 10, scale = 2)
     public BigDecimal amount;
+
+    @NotNull(message = "Tipo é obrigatório")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    public TransactionType type;
 
     @Column
     public String paymentMethod;
