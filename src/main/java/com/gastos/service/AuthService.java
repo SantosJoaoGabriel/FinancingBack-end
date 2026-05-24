@@ -4,6 +4,7 @@ import com.gastos.dto.RegisterUserDTO;
 import com.gastos.dto.UserDTO;
 import com.gastos.model.User;
 import com.gastos.repository.UserRepository;
+import io.quarkus.elytron.security.common.BcryptUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -26,7 +27,7 @@ public class AuthService {
         User user = new User();
         user.name = dto.name.trim();
         user.email = emailNormalizado;
-        user.password = dto.password; // substituir por hash seguro
+        user.password = BcryptUtil.bcryptHash(dto.password);
 
         userRepository.persist(user);
 
