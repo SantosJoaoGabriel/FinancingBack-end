@@ -1,5 +1,6 @@
 package com.gastos.service;
 
+import com.gastos.dto.LoginDTO;
 import com.gastos.dto.RegisterUserDTO;
 import com.gastos.dto.UserDTO;
 import com.gastos.model.User;
@@ -30,6 +31,21 @@ public class AuthService {
         user.password = BcryptUtil.bcryptHash(dto.password);
 
         userRepository.persist(user);
+
+        return toDTO(user);
+    }
+
+    public UserDTO login(LoginDTO dto) {
+        String emailNormalizado = dto.email.trim().toLowerCase();
+
+        User user = userRepository.findByEmail(emailNormalizado)
+                .orElseThrow(() -> new BadRequestException("Email ou senha inválidos"));
+
+        boolean senhaValida = BcryptUtil.matches(dto.password, user.password);
+
+        if (!senhaValida) {
+            throw new BadRequestException("Email ou senha inválidos");
+        }
 
         return toDTO(user);
     }

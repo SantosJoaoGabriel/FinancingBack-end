@@ -1,5 +1,6 @@
 package com.gastos.resource;
 
+import com.gastos.dto.LoginDTO;
 import com.gastos.dto.RegisterUserDTO;
 import com.gastos.dto.UserDTO;
 import com.gastos.service.AuthService;
@@ -27,5 +28,12 @@ public class AuthResource {
         return Response.status(Response.Status.CREATED)
                 .entity(created)
                 .build();
+    }
+
+    @POST
+    @Path("/login")
+    public Response login(@Valid LoginDTO dto) {
+        UserDTO user = authService.login(dto);
+        return Response.ok(user).build();
     }
 }
