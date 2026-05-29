@@ -9,12 +9,16 @@ import java.util.List;
 @ApplicationScoped
 public class TransactionRepository implements PanacheRepository<Transaction> {
 
-    public List<Transaction> findByCategory(String category) {
-        return list("category", category);
+    public List<Transaction> findByUserId(Long userId) {
+        return list("user.id", userId);
     }
 
-    public List<Transaction> findRecent(int limit) {
-        return find("ORDER BY date DESC")
+    public List<Transaction> findByUserIdAndCategory(Long userId, String category) {
+        return list("user.id = ?1 and category = ?2", userId, category);
+    }
+
+    public List<Transaction> findRecentByUserId(Long userId, int limit) {
+        return find("user.id = ?1 ORDER BY date DESC", userId)
                 .page(0, limit)
                 .list();
     }

@@ -2,10 +2,12 @@ package com.gastos.service;
 
 import com.gastos.dto.TransactionDTO;
 import com.gastos.model.Transaction;
+import com.gastos.model.User;
 import com.gastos.repository.TransactionRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 
 import java.util.List;
@@ -17,39 +19,59 @@ public class TransactionService {
     @Inject
     TransactionRepository repository;
 
-    public List<TransactionDTO> findAll() {
-        return repository.listAll()
+    public List<TransactionDTO> findAll(String userEmail) {
+        User user = findUserByEmail(userEmail);
+
+        return repository.findByUserId(user.id)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<TransactionDTO> findRecent(int limit) {
-        return repository.findRecent(limit)
+    public List<TransactionDTO> findRecent(String userEmail, int limit) {
+        User user = findUserByEmail(userEmail);
+
+        return repository.findRecentByUserId(user.id, limit)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public TransactionDTO findById(Long id) {
+    public TransactionDTO findById(String userEmail, Long id) {
+        User user = findUserByEmail(userEmail);
+
         Transaction transaction = repository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Transaction not found"));
+
+        if (!transaction.user.id.equals(user.id)) {
+            throw new ForbiddenException("Acesso negado a esta transação");
+        }
 
         return toDTO(transaction);
     }
 
     @Transactional
-    public TransactionDTO create(TransactionDTO dto) {
+    public TransactionDTO create(String userEmail, TransactionDTO dto) {
+        User user = findUserByEmail(userEmail);
+
         Transaction transaction = toEntity(dto);
         transaction.id = null;
+        transaction.user = user;
+
         repository.persist(transaction);
         return toDTO(transaction);
     }
 
     @Transactional
-    public TransactionDTO update(Long id, TransactionDTO dto) {
+    public TransactionDTO update(String userEmail, Long id, TransactionDTO dto) {
+        User user = findUserByEmail(userEmail);
+
         Transaction existingTransaction = repository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Transaction not found"));
+
+        if (!existingTransaction.user.id.equals(user.id)) {
+            throw new ForbiddenException("Acesso negado a esta transação");
+        }
 
         existingTransaction.description = dto.description;
         existingTransaction.category = dto.category;
@@ -63,11 +85,27 @@ public class TransactionService {
     }
 
     @Transactional
-    public void delete(Long id) {
+    public void delete(String userEmail, Long id) {
+        User user = findUserByEmail(userEmail);
+
         Transaction transaction = repository.findByIdOptional(id)
                 .orElseThrow(() -> new NotFoundException("Transaction not found"));
 
+        if (!transaction.user.id.equals(user.id)) {
+            throw new ForbiddenException("Acesso negado a esta transação");
+        }
+
         repository.delete(transaction);
+    }
+
+    private User findUserByEmail(String email) {
+        User user = User.find("email", email).firstResult();
+
+        if (user == null) {
+            throw new NotFoundException("Usuário autenticado não encontrado");
+        }
+
+        return user;
     }
 
     private TransactionDTO toDTO(Transaction transaction) {
