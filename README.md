@@ -1,77 +1,98 @@
-# gastos-backend
+# SaveUp Back-end
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Aplicação back-end do projeto **SaveUp**, foi desenvolvida utilizando Java com Quarkus. Este módulo é responsável pelas regras de negócio, persistência dos dados, autenticação, processamento das transações e geração de relatórios utilizados pelo sistema.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Visão geral
 
-## Running the application in dev mode
+O back-end fornece a API consumida pelo front-end em Angular e centraliza a lógica principal da aplicação. Entre suas responsabilidades estão o gerenciamento de usuários, controle de ganhos e gastos, cálculos totais financeiros e geração de relatórios em PDF.
 
-You can run your application in dev mode that enables live coding using:
+## Tecnologias utilizadas
 
-```shell script
-./mvnw quarkus:dev
+- Java
+- Quarkus
+- JPA / Hibernate
+- Maven
+- PostgreSQL
+- API REST
+- OpenPDF.
+
+## Funcionalidades principais
+
+- Cadastro e autenticação de usuários.
+- Persistência de dados financeiros.
+- Gerenciamento de ganhos e gastos.
+- Cálculo de totais, saldo e indicadores financeiros.
+- Geração de relatórios em PDF.
+- Histórico de relatórios gerados.
+- Integração com o front-end via endpoints REST.
+
+## Estrutura do projeto
+
+```bash
+## Estrutura do projeto
+
+```bash
+src/
+ ├── main/
+ │   ├── docker/
+ │   ├── java/
+ │   │   └── com/gastos/
+ │   │       ├── dto/
+ │   │       ├── model/
+ │   │       ├── repository/
+ │   │       ├── resource/
+ │   │       ├── service/
+ │   └── resources/
+ │       ├── application.properties
+ │       ├── privateKey.pem
+ │       └── publicKey.pem
+ ├── test/
+ └── ...
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+## Como executar o projeto
 
-## Packaging and running the application
+### Pré-requisitos
 
-The application can be packaged using:
+- Java instalado.
+- Maven instalado.
+- PostgreSQL configurado.
+- Variáveis e propriedades da aplicação ajustadas no `application.properties`.
 
-```shell script
+### Instalação das dependências
+
+```bash
+mvn clean install
+```
+
+### Execução em ambiente de desenvolvimento
+
+```bash
+mvn quarkus:dev
+```
+
+## Build para produção
+
+```bash
 ./mvnw package
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+## Banco de dados
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+O back-end utiliza PostgreSQL local para armazenar usuários, transações e registros relacionados ao sistema A configuração da conexão é feita pelo arquivo `application.properties` do Quarkus.
 
-If you want to build an _über-jar_, execute the following command:
+## API e integração com front-end
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+O front-end Angular consome a API REST do back-end para operações como autenticação, listagem de transações, geração de relatórios, download de PDFs e exclusão de históricos.
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+## Objetivo acadêmico
 
-## Creating a native executable
+Este back-end faz parte do desenvolvimento desse meu TCC  e representa a camada de processamento e regras de negócio do sistema. Seu papel é garantir que os dados financeiros sejam tratados de forma consistente, segura e integrada à interface desenvolvida em Angular.
 
-You can create a native executable using:
+## Melhorias futuras
 
-```shell script
-./mvnw package -Dnative
-```
-
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
-
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
-
-You can then execute your native executable with: `./target/gastos-backend-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST resources for Hibernate ORM with Panache ([guide](https://quarkus.io/guides/rest-data-panache)): Generate Jakarta REST resources for your Hibernate Panache entities and repositories
-- Hibernate Validator ([guide](https://quarkus.io/guides/validation)): Validate object properties (field, getter) and method parameters for your beans (REST, CDI, Jakarta Persistence)
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### REST Data with Panache
-
-Generating Jakarta REST resources with Panache
-
-[Related guide section...](https://quarkus.io/guides/rest-data-panache)
-
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
+- Ampliar cobertura de testes.
+- Refinar validações e tratamento de erros.
+- Melhorar documentação dos endpoints.
+- Evoluir autenticação e segurança.
+- Expandir os tipos de relatórios e indicadores.
