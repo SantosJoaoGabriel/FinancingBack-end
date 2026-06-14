@@ -6,6 +6,7 @@ import com.gastos.service.ReportService;
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -56,6 +57,14 @@ public class ReportResource {
         return Response.ok(pdfBytes)
                 .header("Content-Disposition", "attachment; filename=\"" + report.fileName + "\"")
                 .build();
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") Long id) {
+        Long userId = getAuthenticatedUserId();
+        reportService.deleteReport(id, userId);
+        return Response.noContent().build();
     }
 
     private Long getAuthenticatedUserId() {
